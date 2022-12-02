@@ -1,2 +1,2 @@
-# zshrc
-My zshrc config
+# Config
+My config config
