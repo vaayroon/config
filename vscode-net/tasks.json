@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "buildDevelop",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/MainProject/MainProject.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary",
+                "/property:ASPNETCORE_ENVIRONMENT=Development"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/MainProject/MainProject.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/MainProject/MainProject.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watchDevelop",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/MainProject/MainProject.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary",
+                "/property:ASPNETCORE_ENVIRONMENT=Development"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Generate Test Coverage",
+            "dependsOn": [],
+            "command": "dotnetcoveragetests",
+            "type": "shell"
+        },
+        {
+            "label": "Generate Coverage Report",
+            "command": "~/.dotnet/tools/reportgenerator",
+            "type": "shell",
+            "args": [
+                "-reports:${workspaceFolder}/testresult/coverage.info",
+                "-targetdir:${workspaceFolder}/testresult/covstats"
+            ],
+            "dependsOn": ["Generate Test Coverage"],
+            "problemMatcher": []
+        }
+    ]
+}

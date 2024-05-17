@@ -1,0 +1,70 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": "Development .NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildDevelop",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/MainProject/bin/Debug/net6.0/MainProject.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/MainProject",
+            "justMyCode": true,
+            "stopAtEntry": false,
+            "launchSettingsProfile": "Development",
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            /* "serverReadyAction": {
+               "action": "openExternally",
+               "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            }, */
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/MainProject/Views"
+            }
+        },
+        {
+            "name": "PreProduction .NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/MainProject/bin/Debug/net6.0/MainProject.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/MainProject",
+            "justMyCode": true,
+            "stopAtEntry": false,
+            "launchSettingsProfile": "PreProduction",
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/MainProject/Views"
+            }
+        },
+        {
+            "name": "Production .NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/MainProject/bin/Debug/net6.0/MainProject.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/MainProject",
+            "justMyCode": true,
+            "stopAtEntry": false,
+            "launchSettingsProfile": "Production",
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/MainProject/Views"
+            }
+        },
+        {
+            "name": "Build .NET Core",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildDevelop",
+            "args": [],
+            "cwd": "${workspaceFolder}/MainProject",
+            "stopAtEntry": false
+        }
+    ]
+}

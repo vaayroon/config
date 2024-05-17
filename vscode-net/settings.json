@@ -1,0 +1,11 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "sonarqube-PROJECTNAME",
+        "projectKey": "sonarqube-projectid"
+    },
+    "sqltools.connections": [],
+    "dotnet-test-explorer.testProjectPath" : "./**/*Tests.csproj",
+    "dotnet-test-explorer.testArguments": "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura",
+    "svg.preview.background": "editor",
+    "markiscodecoverage.searchCriteria": "lcov.info"
+}
