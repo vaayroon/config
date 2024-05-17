@@ -1,3 +1,6 @@
+# shellcheck shell=zsh
+# open the config file and write
+setopt HIST_IGNORE_SPACE
 # Fix the Java Problem
 export _JAVA_AWT_WM_NONREPARENTING=1
 
@@ -62,7 +65,8 @@ source /home/k3v1n/.powerlevel10k/powerlevel10k.zsh-theme
 
 # Manual configuration
 
-export PATH=/root/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/k3v1n/.dotnet:/home/k3v1n/.dotnet/tools
+#export DOTNET_ROOT=$HOME/.dotnet
+export PATH=/root/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.bin:/opt/mssql-tools18/bin:/usr/share/dotnet:$HOME/.dotnet/tools
 
 # Manual aliases
 alias ll='lsd -lh --group-dirs=first'
@@ -71,6 +75,50 @@ alias l='lsd --group-dirs=first'
 alias lla='lsd -lha --group-dirs=first'
 alias ls='lsd --group-dirs=first'
 alias cat='batcat'
+
+### My alias
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+alias sudo="sudo "
+alias catnormal='/usr/bin/cat'
+alias kittyprint='kitty +kitten icat'
+alias gc='git commit -S'
+
+## dotnet alias
+
+function dotnetcoveragetests ()
+{
+  rm -r testresult/* || true
+  rm -r testresult/* || true
+  mv lcov.info lcov.info.bck || true
+  dotnet test TACS4-QUMA.Tests /p:CollectCoverage=true /p:CoverletOutput="../testresult/"
+  dotnet test TACS4.QUMA.Application.Tests /p:CollectCoverage=true /p:CoverletOutput="../testresult/" /p:MergeWith="../testresult/coverage.json"
+  dotnet test TACS4.QUMA.Architecture.Tests /p:CollectCoverage=true /p:CoverletOutput="../testresult/" /p:MergeWith="../testresult/coverage.json" /p:CoverletOutputFormat=lcov
+  cp testresult/coverage.info lcov.info
+}
+
+function dotnetcoveragetests-test ()
+{
+  rm -r testresult/* || true
+  mv lcov.info lcov.info.bck || true
+  dotnet test TACS4-QUMA.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+  dotnet test TACS4.QUMA.Application.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+  dotnet test TACS4.QUMA.Architecture.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+  dotnet test TACS4-QUMA.Tests /p:CollectCoverage=true /p:CoverletOutput="../testresult/"
+  dotnet test TACS4.QUMA.Application.Tests /p:CollectCoverage=true /p:CoverletOutput="../testresult/" /p:MergeWith="../testresult/coverage.json"
+  dotnet-coverage collect 'dotnet test TACS4.QUMA.Architecture.Tests /p:CollectCoverage=true /p:CoverletOutput="../testresult/" /p:MergeWith="../testresult/coverage.json" /p:CoverletOutputFormat=lcov' -f xml -o 'coverage.xml'
+  #cp testresult/coverage.info lcov.info
+}
+
+## git alias
+function gitclean(){
+	typeOfRemove="-d"
+  if [[ -n "${1}" && ("${1}" == "-d" || "${1}" == "-D") ]]; then
+    typeOfRemove="${1}"
+  fi
+	git remote prune origin
+	git branch -vv | grep ': gone]'|  grep -v "\*" | awk '{ print $1; }' | xargs -r git branch "${1}"
+}
 
 ### End my alias
 
@@ -82,6 +130,10 @@ source /usr/share/doc/fzf/examples/completion.zsh
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh-sudo/sudo.plugin.zsh
+source /usr/share/zsh-plugins/git.zsh
+for file in /usr/share/zsh-plugins/*.plugin.zsh; do
+  source "$file"
+done
 
 # Functions
 function mkt(){
@@ -92,6 +144,10 @@ function mktk(){
 	mkdir {nmap,content,exploits,scripts}
 }
 
+# Get information of a program from qtile config
+function piqtile() {
+  cat ~/.config/qtile/config.py | grep "$1" -A 3 -B 3
+}
 
 # Extract nmap information
 function extractPorts(){
@@ -142,41 +198,33 @@ function fzf-lovely(){
 }
 
 function rmk(){
-	scrub -p dod $1
-	shred -zun 10 -v $1
+  local arrayToDelete=("$@")
+  for file in "${arrayToDelete[@]}"; do
+	  scrub -p dod $file
+	  shred -zun 10 -v $file
+  done
 }
 
 ### My functions
 
-function startvpn(){
-  sudo openvpn --config base.ovpn --daemon
-}
+#OpenAi
+
+#export OPENAI_API_KEY=`cat $PATH_OPENAI_API_KEY`
 
 function stopvpn(){
-  pgrep -f openvpn | xargs sudo kill -9
-}
-
-function startapp(){
-     brave-browser &> /dev/null &
-     disown
-     opera &> /dev/null &
-     disown
-}
-
-function stopkapp() {
-    pkill 'brave-browser|opera'
-}
-
-#Or
-
-function killapp() {
-    killall 'brave-browser|opera'
+  sudo umount /W || true
+  pgrep -f vpn | xargs sudo kill -9
 }
 
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
 
-export CLR_OPENSSL_VERSION_OVERRIDE=1.1
+#export CLR_OPENSSL_VERSION_OVERRIDE=1.1
 
 # Finalize Powerlevel10k instant prompt. Should stay at the bottom of ~/.zshrc.
 (( ! ${+functions[p10k-instant-prompt-finalize]} )) || p10k-instant-prompt-finalize
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
+
+plugins=(docker docker-compose dotnet git)
