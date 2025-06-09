@@ -131,6 +131,8 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh-sudo/sudo.plugin.zsh
 source /usr/share/zsh-plugins/git.zsh
+# Load custom VGitAliases module
+source /usr/share/zsh-vaayroon/VGitAliases/VGitAliases.zsh
 for file in /usr/share/zsh-plugins/*.plugin.zsh; do
   source "$file"
 done
