@@ -133,6 +133,8 @@ source /usr/share/zsh-sudo/sudo.plugin.zsh
 source /usr/share/zsh-plugins/git.zsh
 # Load custom VGitAliases module
 source /usr/share/zsh-vaayroon/VGitAliases/VGitAliases.zsh
+# Load custom VClip module
+source /usr/share/zsh-vaayroon/VClip/VClip.zsh
 for file in /usr/share/zsh-plugins/*.plugin.zsh; do
   source "$file"
 done
