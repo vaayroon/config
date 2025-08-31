@@ -1,0 +1,59 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clean Bin and Obj Folders (Windows)",
+            "type": "shell",
+            "command": "for /f \"delims=\" %d in ('dir \"${workspaceFolder}\" /ad /s /b ^| findstr /r \"\\\\bin$ \\\\obj$\"') do @echo Eliminando: \"%d\" && rmdir /s /q \"%d\"",
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Remove all bin and obj folders from the workspace directory."
+        },
+        {
+            "label": "Print Bin and Obj Folders (Windows)",
+            "type": "shell",
+            "command": "for /f \"delims=\" %d in ('dir \"${workspaceFolder}\" /ad /s /b ^| findstr /r \"\\\\bin$ \\\\obj$\"') do @echo \"%d\"",
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Print all bin and obj folders from the workspace directory."
+        }
+    ]
+}
