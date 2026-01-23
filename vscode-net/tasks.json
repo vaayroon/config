@@ -1,73 +1,195 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "buildDevelop",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/MainProject/MainProject.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary",
-                "/property:ASPNETCORE_ENVIRONMENT=Development"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/MainProject/MainProject.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/MainProject/MainProject.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "watchDevelop",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "${workspaceFolder}/MainProject/MainProject.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary",
-                "/property:ASPNETCORE_ENVIRONMENT=Development"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Generate Test Coverage",
-            "dependsOn": [],
-            "command": "dotnetcoveragetests",
-            "type": "shell"
-        },
-        {
-            "label": "Generate Coverage Report",
-            "command": "~/.dotnet/tools/reportgenerator",
-            "type": "shell",
-            "args": [
-                "-reports:${workspaceFolder}/testresult/coverage.info",
-                "-targetdir:${workspaceFolder}/testresult/covstats"
-            ],
-            "dependsOn": ["Generate Test Coverage"],
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build RestSpcService.Api Dev",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary",
+        "/p:Configuration=Debug",
+        "/p:Platform=\"AnyCPU\"",
+        "/p:EnvironmentName=Development"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Run RestSpcService [https]",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "--launch-profile",
+        "https"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Watch RestSpcService [https]",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "--launch-profile",
+        "https"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Publish RestSpcService.Api",
+      "type": "shell",
+      "command": "dotnet",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "-c",
+        "Release",
+        "/p:EnvironmentName=${input:env}",
+        "-o",
+        "${workspaceFolder}/publish/${input:env}",
+        "/p:DeleteExistingFiles=true",
+        "/p:TargetFramework=net8.0",
+        "/p:RuntimeIdentifier=win-x64"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "detail": "Publica el proyecto RestSpcService.Api en el entorno seleccionado."
+    },
+    {
+      "label": "Publish and Zip RestSpcService.Api",
+      "type": "shell",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "cd ${workspaceFolder}/publish/${input:env} && zip -r ${input:version}.${input:env}.zip * && move ${input:version}.${input:env}.zip ${workspaceFolder}/publish/${input:version}.${input:env}.zip"
+      ],
+      "dependsOn": [
+        "Publish RestSpcService.Api"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Veracode Clean",
+      "type": "shell",
+      "command": "C:/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/msbuild.exe",
+      "args": [
+        "Veracode.Package.build",
+        "/t:VeracodeClean",
+        "/p:VeracodeBuild=true"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Veracode Build",
+      "type": "shell",
+      "command": "C:/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/msbuild.exe",
+      "args": [
+        "RestSpcService.sln",
+        "/p:VeracodeBuild=true",
+        "/p:VeracodeSolutionName=RestSpcService",
+        "/p:VeracodeBuildOutputPath=.veracode",
+        "/p:VeracodeRemoveExecutables=false",
+        "/verbosity:m"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Veracode Clean"
+      ],
+      "group": "build"
+    },
+    {
+      "label": "Veracode Package",
+      "type": "shell",
+      "command": "C:/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/msbuild.exe",
+      "args": [
+        "Veracode.Package.build",
+        "/p:VeracodeBuild=true",
+        "/p:VeracodeSolutionName=RestSpcService",
+        "/p:VeracodeBuildOutputPath=.veracode",
+        "/p:VeracodeZip=true",
+        "/verbosity:m"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Veracode Build"
+      ],
+      "group": "build",
+      "detail": "Clean, build and package the solution for Veracode static scanning."
+    },
+    {
+      "label": "Generate Test Coverage",
+      "dependsOn": [],
+      "command": "DotNetCoverageTests",
+      "type": "shell",
+      "args": [
+        "${workspaceFolder}",
+        "test/RestSpcService.Application.Tests",
+        "test/RestSpcService.Architecture.Tests"
+      ]
+    },
+    {
+      "label": "Generate Coverage Report",
+      "command": "~/.dotnet/tools/reportgenerator",
+      "type": "shell",
+      "args": [
+        "-reports:${workspaceFolder}/testresult/coverage.info",
+        "-targetdir:${workspaceFolder}/testresult/covstats"
+      ],
+      "dependsOn": [
+        "Generate Test Coverage"
+      ],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "env",
+      "type": "pickString",
+      "description": "Selecciona el entorno",
+      "options": [
+        "QA",
+        "UAT",
+        "PRODUCTION"
+      ],
+      "default": "QA"
+    },
+    {
+      "id": "version",
+      "type": "promptString",
+      "description": "Introduce la versión a publicar (ej. 2.0.0.0)",
+      "default": "2.0.0.0"
+    }
+  ]
 }

@@ -1,11 +1,352 @@
 {
-    "sonarlint.connectedMode.project": {
-        "connectionId": "sonarqube-PROJECTNAME",
-        "projectKey": "sonarqube-projectid"
+    "debug.onTaskErrors": "showErrors",
+    "debug.console.fontSize": 14,
+    "debug.console.fontFamily": "'CaskaydiaCove Nerd Font'",
+    "editor.fontFamily": "'CaskaydiaCove Nerd Font', 'Cascadia Code PL', 'Droid Sans Mono', 'monospace', monospace",
+    "editor.fontLigatures": true,
+    "editor.guides.bracketPairs": true,
+    "editor.guides.bracketPairsHorizontal": true,
+    "editor.inlineSuggest.enabled": true,
+    "editor.inlineSuggest.showToolbar": "always",
+    "editor.largeFileOptimizations": false,
+    "editor.linkedEditing": true,
+    "editor.minimap.renderCharacters": false,
+    "editor.stickyScroll.enabled": true,
+    "editor.fontSize": 14,
+    "editor.minimap.enabled": false,
+    "explorer.autoReveal": false,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.compactFolders": false,
+    "explorer.fileNesting.patterns": {
+        "*.css": "*.min.css, *.css.map",
+        "*.razor": "${capture}.razor.cs, ${capture}.razor.css",
+        "*.json": "${capture}.*.json",
+        "*.js": "*.min.js, *.js.map",
+        "*.ts": "*.d.ts, *.js, *.js.map"
     },
-    "sqltools.connections": [],
-    "dotnet-test-explorer.testProjectPath" : "./**/*Tests.csproj",
-    "dotnet-test-explorer.testArguments": "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura",
-    "svg.preview.background": "editor",
-    "markiscodecoverage.searchCriteria": "lcov.info"
+    "git.confirmSync": false,
+    "git.openRepositoryInParentFolders": "always",
+    "oneDarkPro.bold": true,
+    "oneDarkPro.editorTheme": "One Dark Pro Darker",
+    "oneDarkPro.vivid": true,
+    "symbols.hidesExplorerArrows": false,
+    "terminal.integrated.fontFamily": "'CaskaydiaCove Nerd Font'",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.profiles.windows": {
+        "MyTerminal": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "MyTerminal",
+    "window.commandCenter": false,
+    "workbench.activityBar.location": "top",
+    "workbench.colorTheme": "One Dark Pro Darker",
+    "workbench.iconTheme": "symbols",
+    "workbench.preferredDarkColorTheme": "One Dark Pro Darker",
+    "workbench.preferredHighContrastColorTheme": "One Dark Pro Darker",
+    "workbench.productIconTheme": "fluent-icons",
+    "workbench.sideBar.location": "right",
+    "workbench.tree.enableStickyScroll": true,
+    "github.copilot.editor.enableAutoCompletions": true,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": true,
+        "scminput": false,
+        "yaml": false,
+        "markdown": true
+    },
+    "html-css-class-completion.CSSLanguages": [
+        "css",
+        "sass",
+        "scss"
+    ],
+    "html-css-class-completion.HTMLLanguages": [
+        "html",
+        "vue",
+        "aspnetcorerazor",
+        "razor",
+        "blade",
+        "handlebars",
+        "twig",
+        "django-html",
+        "php",
+        "markdown",
+        "erb",
+        "ejs",
+        "svelte"
+    ],
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "errorLens.lintFilePaths": {
+        "eslint": [
+            "**/*.eslintrc.{js,cjs,yaml,yml,json}",
+            "**/*package.json"
+        ],
+        "Stylelint": [
+            "**/*.stylelintrc",
+            "**/*.stylelintrc.{cjs,js,json,yaml,yml}",
+            "**/*stylelint.config.{cjs,js}",
+            "**/*package.json"
+        ]
+    },
+    "[aspnetcorerazor]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    "files.associations": {
+        "*.csproj": "msbuild",
+        "*.foo.json": "jsonc"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "todo-tree.tree.groupedByTag": true,
+    "todo-tree.general.tags": [
+        "TODO",
+        "FIXME",
+        "NOTE",
+        "OPTIMIZE",
+        "BUG",
+        "HACK",
+        "TEST",
+        "PROVISIONAL"
+    ],
+    "todo-tree.highlights.customHighlight": {
+        "TODO": {
+            "foreground": "#00B69B",
+            "icon": "checklist",
+            "type": "text",
+            "gutterIcon": true
+        },
+        "FIXME": {
+            "foreground": "#EC2D30",
+            "icon": "alert",
+            "type": "text",
+            "gutterIcon": true
+        },
+        "NOTE": {
+            "foreground": "#1981C2",
+            "icon": "info",
+            "type": "text",
+            "gutterIcon": true
+        },
+        "OPTIMIZE": {
+            "foreground": "#00d9ff",
+            "icon": "rocket",
+            "type": "text",
+            "gutterIcon": true
+        },
+        "BUG": {
+            "foreground": "#79057d",
+            "icon": "bug",
+            "type": "text",
+            "gutterIcon": true
+        },
+        "HACK": {
+            "foreground": "#ff7700",
+            "icon": "tools",
+            "type": "text",
+            "gutterIcon": true
+        },
+        "TEST": {
+            "foreground": "#ff00c8",
+            "icon": "beaker",
+            "type": "text",
+            "gutterIcon": true
+        },
+        "PROVISIONAL": {
+            "foreground": "#FFA500",
+            "icon": "hourglass",
+            "type": "text",
+            "background": "#333333",
+            "gutterIcon": true
+        }
+    },
+    "todo-tree.filtering.excludeGlobs": [
+        "**/node_modules/*/**"
+    ],
+    "sonarlint.output.showVerboseLogs": true,
+    "sonarlint.output.showAnalyzerLogs": true,
+    "sonarlint.focusOnNewCode": true,
+    "sonarlint.connectedMode.connections.sonarqube": [
+        {
+            "serverUrl": "http://10.206.14.24:9090",
+            "connectionId": "TACS4-QUMA"
+        }
+    ],
+    "coverage-gutters.coverageReportFileName": "testresult/**/index.html",
+    "coverage-gutters.showRulerCoverage": true,
+    "csharpextensions.useFileScopedNamespace": true,
+    "diffEditor.ignoreTrimWhitespace": true,
+    "dotnet-test-explorer.enableTelemetry": false,
+    "GitLive.Issue tracker integration": "Disabled",
+    "GitLive.Special branches": "main|master|trunk|dev|develop|qa|test|release[-/].*",
+    "intellicode-completions-cdk.runAlongsideCopilot": true,
+    "microsoft.useMsal": true,
+    "rapidapi.terminalLink.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "svg.preview.mode": "svg",
+    "NugetGallery.credentialProviderFolder": "C:/Users/C20734E/.nuget/plugins/netcore/CredentialProvider.Microsoft",
+    "NugetGallery.sources": [
+        "{\"name\":\"nuget.org\",\"url\":\"https://api.nuget.org/v3/index.json\"}",
+        "{\"name\":\"ExperianNuget\",\"url\":\"https://10.185.36.97:8087/nuget\"}"
+    ],
+    "git.enableCommitSigning": true,
+    "git-graph.repository.commits.showSignatureStatus": true,
+    "git-graph.repository.sign.commits": true,
+    "git-graph.repository.sign.tags": true,
+    "yaml.schemas": {
+        "file:///c%3A/Users/C20734E/.vscode/extensions/atlassian.atlascode-4.0.17/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
+    },
+    "redhat.telemetry.enabled": false,
+    "atlascode.bitbucket.issues.createJiraEnabled": true,
+    "atlascode.bitbucket.pipelines.branchFilters": [
+        "master",
+        "main",
+        "develop"
+    ],
+    "atlascode.jira.jqlList": [
+        {
+            "id": "0b923034-9059-431d-8e04-42ad008afec0",
+            "siteId": "agile.experian.com",
+            "name": "SSPC Not Active Sprint - TODO",
+            "query": "assignee = currentUser() AND sprint not in openSprints() AND status = \"To Do\"",
+            "enabled": true,
+            "monitor": true
+        },
+        {
+            "id": "39a0f86e-2d9e-4fb7-be1c-6d50c8fead8f",
+            "siteId": "agile.experian.com",
+            "name": "SSPC Active Sprint - TODO - Unassigned/Default",
+            "query": "assignee in (C64853A, EMPTY) AND sprint in openSprints() AND status = \"To Do\" AND summary ~ \"SPCSS*\"",
+            "enabled": true,
+            "monitor": true
+        },
+        {
+            "id": "c2010f56-60f5-4953-9080-1892574e7eb8",
+            "siteId": "agile.experian.com",
+            "name": "SSPC Active Sprint - TODO",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = \"To Do\"",
+            "enabled": true,
+            "monitor": true
+        },
+        {
+            "id": "3685814a-8ba7-42a0-88cd-79a0b0515765",
+            "siteId": "agile.experian.com",
+            "name": "SSPC Active Sprint - DEVELOPING",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = Developing",
+            "enabled": true,
+            "monitor": true
+        },
+        {
+            "id": "1b18b887-4875-4dfb-a81e-40070b3669e1",
+            "siteId": "agile.experian.com",
+            "name": "SSPC Active Sprint - QA",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = QA",
+            "enabled": true,
+            "monitor": true
+        },
+        {
+            "id": "75a7409d-a0af-45eb-afb0-b161d4ad26ac",
+            "siteId": "agile.experian.com",
+            "name": "SSPC Active Sprint - DONE",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = Done",
+            "enabled": true,
+            "monitor": true
+        }
+    ],
+    "win-ca.inject": "append",
+    "workbench.layoutControl.enabled": false,
+    "atlascode.bitbucket.enabled": true,
+    "atlascode.jira.startWorkBranchTemplate.customPrefixes": [
+        "test/",
+        "security_patch/",
+        "upgrade/",
+        "chore/",
+        "doc/"
+    ],
+    "workbench.startupEditor": "none",
+    "atlascode.jira.lastCreateSiteAndProject": {
+        "siteId": "agile.experian.com",
+        "projectKey": "BRT"
+    },
+    "mssql.connectionGroups": [
+        {
+            "name": "ROOT",
+            "id": "B2264D76-AD42-47E5-A0E3-4289C96DA553"
+        }
+    ],
+    "mssql.connections": [],
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.chat.languageContext.typescript.enabled": true,
+    "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+    "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+    "atlascode.jira.todoIssues.triggers": [
+        "TODO",
+        "todo",
+        "Todo",
+        "ToDo",
+        "BUG",
+        "bug",
+        "Bug",
+        "FIXME",
+        "fixme",
+        "Fixme",
+        "FixMe",
+        "HACK",
+        "hack",
+        "Hack"
+    ],
+    "veracode-scan.SCA Vulnerability.sevFilters": [],
+    "veracode-scan.SCA Vulnerability.usageFilters": [],
+    "veracode-scan.SAST Flaw.sevFilters": [],
+    "veracode-scan.SCA Features.policy": false,
+    "veracode-scan.SAST Features.artifactGlob": ".veracode/build/*.{jar,js,dll,zip,tar,tar.gz,war}",
+    "powershell.integratedConsole.showOnStartup": false,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "workbench.editorAssociations": {
+        "*.nupkg": "nupkg-viewer.packageEditor"
+    },
+    "[dockercompose]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "advanced",
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "git.replaceTagsWhenPull": true,
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "markdown-pdf-plus.marginLeft": "37px",
+    "markdown-pdf-plus.marginRight": "37,8px",
+    "markdown-pdf-plus.marginTop": "37,8px",
+    "markdown-pdf-plus.marginBottom": "37,8px",
+    "markdown-pdf-plus.CSSRaw": "pre {     white-space: pre-wrap;     word-wrap: break-word; }  @page {     size: A4;     margin: 0;     margin: 10mm; }  .cover {     position: relative;     width: 210mm;     height: 297mm;     box-sizing: border-box;     overflow: hidden; }  .logo {     max-width: 200px;     height: auto;     z-index: 20; }  .body-container {     margin: 300px 0 300px 0; }  .title {     color: rgb(0, 0, 139);     font-size: 48px;     line-height: 1.05;     border: none; }  .gradient {     height: 4px;     background: linear-gradient(to right, rgb(167, 54, 129), rgb(40, 71, 141));     width: 100%;     margin: 0 0 20px 0; }  h1, h2, h3, h4, h5, h6 {     color: rgb(0, 0, 139); }  .subtitle {     color: rgb(0, 0, 139);     font-size: 35px;     margin-top: 0; }  .author {     color: rgb(0, 0, 139);     font-size: 20px;     margin-top: 0; }  .version {     color: rgb(0, 0, 139);     font-size: 10px;     margin-top: 0; }  .footer {     z-index: 15;     opacity: 0.85;     max-width: 100%; }  .page-break {     page-break-after: always; }",
+    "markdown-pdf-plus.usePageStyleFromCSS": true,
+    "protobuf.externalLinter.enabled": true,
+    "protobuf.externalLinter.linter": "buf",
+    "protobuf.protoc.path": "C:\\Users\\C20734E\\scoop\\shims\\protoc.exe",
+    "protobuf.buf.path": "C:\\Users\\C20734E\\AppData\\Roaming\\Code\\User\\globalStorage\\drblury.protobuf-vsc\\bin\\buf.exe",
+    "chat.viewSessions.orientation": "stacked"
 }
