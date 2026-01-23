@@ -32,6 +32,16 @@ function Get-GitDevelopBranch {
   }
 }
 
+function Get-GitQaBranch {
+  if (git show-ref --verify refs/heads/qa) {
+    return "qa"
+  } elseif (git show-ref --verify refs/heads/test) {
+    return "test"
+  }
+
+  return $null
+}
+
 function Get-GitUatBranch {
   if (git show-ref --verify refs/heads/uat) {
     return "uat"
@@ -73,7 +83,7 @@ function global:gbm { git branch -m $args } # Renombrar rama actual
 function global:gsw { git switch $args }
 function global:gswc { git switch -c $args } # Crear y cambiar a nueva rama
 function global:gswm { git switch $(Get-GitMainBranch) } # Cambiar a rama principal
-function global:gswd { 
+function global:gswd {
   $devBranch = Get-GitDevelopBranch
   if ($devBranch) {
     git switch $devBranch
@@ -81,18 +91,26 @@ function global:gswd {
     Write-Error "No se encontró una rama de desarrollo (develop/dev)"
   }
 }
-function global:gswu { 
-  $devBranch = Get-GitUatBranch
-  if ($devBranch) {
-    git switch $devBranch
+function global:gswq {
+  $qaBranch = Get-GitQaBranch
+  if ($qaBranch) {
+    git switch $qaBranch
+  } else {
+    Write-Error "No se encontró una rama de QA (qa/test)"
+  }
+}
+function global:gswu {
+  $uatBranch = Get-GitUatBranch
+  if ($uatBranch) {
+    git switch $uatBranch
   } else {
     Write-Error "No se encontró una rama de UAT (uat/staging)"
   }
 }
-function global:gswp { 
-  $devBranch = Get-GitProductionBranch
-  if ($devBranch) {
-    git switch $devBranch
+function global:gswp {
+  $prodBranch = Get-GitProductionBranch
+  if ($prodBranch) {
+    git switch $prodBranch
   } else {
     Write-Error "No se encontró una rama de producción (production/pro)"
   }
@@ -229,6 +247,73 @@ function global:gunwip {
   } else {
     Write-Error "No hay commit WIP para deshacer"
   }
+}
+
+# Elimina todas las ramas locales menos la actual
+function global:gblclean {
+  [CmdletBinding()]
+  param(
+    [Parameter(Position = 0)]
+    [ValidateSet("-d", "-D")]
+    [string]$DeleteFlag = "-d",
+
+    [Parameter()]
+    [switch]$Force,
+
+    [Parameter()]
+    [switch]$DryRun
+  )
+
+  $currentBranch = Get-GitCurrentBranch
+
+  # Obtener todas las ramas locales excepto la actual
+  $branchesToDelete = @(git for-each-ref --format='%(refname:short)' refs/heads |
+    Where-Object { $_ -ne $currentBranch })
+
+  # Si no hay ramas para eliminar
+  if ($branchesToDelete.Count -eq 0) {
+    Write-Host "✅ No hay ramas locales para eliminar." -ForegroundColor Green
+    return
+  }
+
+  # Mostrar ramas que serán eliminadas
+  Write-Host "🗑️ Ramas locales que serán eliminadas:" -ForegroundColor Yellow
+  $branchesToDelete | ForEach-Object { Write-Host "   - $_" -ForegroundColor Yellow }
+
+  # Si es una ejecución de prueba, terminar aquí
+  if ($DryRun) {
+    Write-Host "ℹ️ Modo de prueba: No se ha eliminado ninguna rama." -ForegroundColor Cyan
+    return
+  }
+
+  # Solicitar confirmación si no está en modo forzado
+  if (-not $Force) {
+    $confirmation = Read-Host "¿Eliminar estas ramas? (s/N)"
+    if ($confirmation -notmatch '^[sS]$') {
+      Write-Host "❌ Operación cancelada." -ForegroundColor Red
+      return
+    }
+  }
+
+  # Eliminar las ramas
+  $deletedCount = 0
+  $errorCount = 0
+
+  foreach ($branch in $branchesToDelete) {
+    Write-Host "🗑️ Eliminando rama: $branch" -ForegroundColor Cyan -NoNewline
+    $output = git branch $DeleteFlag $branch 2>&1
+
+    if ($LASTEXITCODE -eq 0) {
+      Write-Host " ✅" -ForegroundColor Green
+      $deletedCount++
+    } else {
+      Write-Host " ❌" -ForegroundColor Red
+      Write-Host "   $output" -ForegroundColor Red
+      $errorCount++
+    }
+  }
+
+  # Resumen final
 }
 
 # Elimina ramas locales que ya no existen en remoto (gone)
