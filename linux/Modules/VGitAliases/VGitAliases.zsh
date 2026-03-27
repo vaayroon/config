@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/bash
 # VGitAliases.zsh
 # Implementación de los alias de git de Oh My Zsh
 # Author: Condor Romero, Bryan Kevin
@@ -100,9 +100,12 @@ function gswp() {
 }
 
 # Mantener algunos alias de checkout por compatibilidad
-alias gco='git switch'
-alias gcb='git switch -c'
-alias gcm='git switch $(git_main_branch)'
+# alias gco='git switch'
+# alias gcb='git switch -c'
+# alias gcm='git switch $(git_main_branch)'
+
+# Olvidamos la compatibilidad
+alias gcb='git_current_branch'
 
 # Alias para restore (moderno)
 alias grs='git restore'

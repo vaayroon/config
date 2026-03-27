@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/zsh
 # VClip.zsh
 # Implementación de funciones para copiar contenido al portapapeles usando xclip
 # Author: Condor Romero, Bryan Kevin
