@@ -1,5 +1,6 @@
 {
     "debug.onTaskErrors": "showErrors",
+    "window.zoomLevel": -1,
     "debug.console.fontSize": 14,
     "debug.console.fontFamily": "'CaskaydiaCove Nerd Font'",
     "editor.fontFamily": "'CaskaydiaCove Nerd Font', 'Cascadia Code PL', 'Droid Sans Mono', 'monospace', monospace",
@@ -37,20 +38,17 @@
         "MyTerminal": {
             "source": "PowerShell",
             "icon": "terminal-powershell"
-        },
-        "Command Prompt": {
-            "path": [
-                "${env:windir}\\Sysnative\\cmd.exe",
-                "${env:windir}\\System32\\cmd.exe"
-            ],
-            "args": [],
-            "icon": "terminal-cmd"
-        },
-        "Git Bash": {
-            "source": "Git Bash"
         }
     },
     "terminal.integrated.defaultProfile.windows": "MyTerminal",
+    "terminal.integrated.profiles.linux": {
+        "MyTerminal": {
+            "path": "zsh",
+            "args": ["-i"],
+            "icon": "terminal-linux"
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "MyTerminal",
     "window.commandCenter": false,
     "workbench.activityBar.location": "top",
     "workbench.colorTheme": "One Dark Pro Darker",
@@ -107,7 +105,7 @@
         "editor.defaultFormatter": "ms-dotnettools.csharp"
     },
     "files.associations": {
-        "*.csproj": "msbuild",
+        "*.csproj": "xml",
         "*.foo.json": "jsonc"
     },
     "[json]": {
@@ -205,18 +203,10 @@
     "rapidapi.terminalLink.enabled": false,
     "security.workspace.trust.untrustedFiles": "open",
     "svg.preview.mode": "svg",
-    "NugetGallery.credentialProviderFolder": "C:/Users/C20734E/.nuget/plugins/netcore/CredentialProvider.Microsoft",
-    "NugetGallery.sources": [
-        "{\"name\":\"nuget.org\",\"url\":\"https://api.nuget.org/v3/index.json\"}",
-        "{\"name\":\"ExperianNuget\",\"url\":\"https://10.185.36.97:8087/nuget\"}"
-    ],
     "git.enableCommitSigning": true,
     "git-graph.repository.commits.showSignatureStatus": true,
     "git-graph.repository.sign.commits": true,
     "git-graph.repository.sign.tags": true,
-    "yaml.schemas": {
-        "file:///c%3A/Users/C20734E/.vscode/extensions/atlassian.atlascode-4.0.17/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
-    },
     "redhat.telemetry.enabled": false,
     "atlascode.bitbucket.issues.createJiraEnabled": true,
     "atlascode.bitbucket.pipelines.branchFilters": [
@@ -226,50 +216,58 @@
     ],
     "atlascode.jira.jqlList": [
         {
-            "id": "0b923034-9059-431d-8e04-42ad008afec0",
-            "siteId": "agile.experian.com",
-            "name": "SSPC Not Active Sprint - TODO",
-            "query": "assignee = currentUser() AND sprint not in openSprints() AND status = \"To Do\"",
+            "id": "59ea2dbc-4ef2-4890-a37c-e7dc241483fa",
+            "siteId": "e209503d-77e6-40fd-9fe4-33e8f0708abd",
+            "name": "Not Active Sprint - whoever - OPEN",
+            "query": "assignee != currentUser() AND status = Open AND project = \"Portal Alta Baja\"",
             "enabled": true,
             "monitor": true
         },
         {
-            "id": "39a0f86e-2d9e-4fb7-be1c-6d50c8fead8f",
-            "siteId": "agile.experian.com",
-            "name": "SSPC Active Sprint - TODO - Unassigned/Default",
-            "query": "assignee in (C64853A, EMPTY) AND sprint in openSprints() AND status = \"To Do\" AND summary ~ \"SPCSS*\"",
+            "id": "0b923034-9059-431d-8e04-42ad008afec0",
+            "siteId": "e209503d-77e6-40fd-9fe4-33e8f0708abd",
+            "name": "Not Active Sprint - OPEN",
+            "query": "assignee = currentUser() AND sprint not in openSprints() AND status = Open",
             "enabled": true,
             "monitor": true
         },
         {
             "id": "c2010f56-60f5-4953-9080-1892574e7eb8",
-            "siteId": "agile.experian.com",
-            "name": "SSPC Active Sprint - TODO",
-            "query": "assignee = currentUser() AND sprint in openSprints() AND status = \"To Do\"",
+            "siteId": "e209503d-77e6-40fd-9fe4-33e8f0708abd",
+            "name": "Active Sprint - OPEN",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = Open",
             "enabled": true,
             "monitor": true
         },
         {
             "id": "3685814a-8ba7-42a0-88cd-79a0b0515765",
-            "siteId": "agile.experian.com",
-            "name": "SSPC Active Sprint - DEVELOPING",
-            "query": "assignee = currentUser() AND sprint in openSprints() AND status = Developing",
+            "siteId": "e209503d-77e6-40fd-9fe4-33e8f0708abd",
+            "name": "Active Sprint - EXECUTING",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = \"In Execution\"",
             "enabled": true,
             "monitor": true
         },
         {
             "id": "1b18b887-4875-4dfb-a81e-40070b3669e1",
-            "siteId": "agile.experian.com",
-            "name": "SSPC Active Sprint - QA",
-            "query": "assignee = currentUser() AND sprint in openSprints() AND status = QA",
+            "siteId": "e209503d-77e6-40fd-9fe4-33e8f0708abd",
+            "name": "Active Sprint - REVIEW",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = \"In Review\"",
             "enabled": true,
             "monitor": true
         },
         {
             "id": "75a7409d-a0af-45eb-afb0-b161d4ad26ac",
-            "siteId": "agile.experian.com",
-            "name": "SSPC Active Sprint - DONE",
-            "query": "assignee = currentUser() AND sprint in openSprints() AND status = Done",
+            "siteId": "e209503d-77e6-40fd-9fe4-33e8f0708abd",
+            "name": "Active Sprint - CLOSED",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = Closed",
+            "enabled": true,
+            "monitor": true
+        },
+        {
+            "id": "d1c8b9e5-7c3a-4c8e-9f0b-9e5f1a2b3c4d",
+            "siteId": "e209503d-77e6-40fd-9fe4-33e8f0708abd",
+            "name": "Active Sprint - REOPENED",
+            "query": "assignee = currentUser() AND sprint in openSprints() AND status = Reopened",
             "enabled": true,
             "monitor": true
         }
@@ -282,13 +280,10 @@
         "security_patch/",
         "upgrade/",
         "chore/",
-        "doc/"
+        "doc/",
+        "refactor/"
     ],
     "workbench.startupEditor": "none",
-    "atlascode.jira.lastCreateSiteAndProject": {
-        "siteId": "agile.experian.com",
-        "projectKey": "BRT"
-    },
     "mssql.connectionGroups": [
         {
             "name": "ROOT",
@@ -316,11 +311,6 @@
         "hack",
         "Hack"
     ],
-    "veracode-scan.SCA Vulnerability.sevFilters": [],
-    "veracode-scan.SCA Vulnerability.usageFilters": [],
-    "veracode-scan.SAST Flaw.sevFilters": [],
-    "veracode-scan.SCA Features.policy": false,
-    "veracode-scan.SAST Features.artifactGlob": ".veracode/build/*.{jar,js,dll,zip,tar,tar.gz,war}",
     "powershell.integratedConsole.showOnStartup": false,
     "github.copilot.nextEditSuggestions.enabled": true,
     "workbench.editorAssociations": {
@@ -344,9 +334,17 @@
     "markdown-pdf-plus.marginBottom": "37,8px",
     "markdown-pdf-plus.CSSRaw": "pre {     white-space: pre-wrap;     word-wrap: break-word; }  @page {     size: A4;     margin: 0;     margin: 10mm; }  .cover {     position: relative;     width: 210mm;     height: 297mm;     box-sizing: border-box;     overflow: hidden; }  .logo {     max-width: 200px;     height: auto;     z-index: 20; }  .body-container {     margin: 300px 0 300px 0; }  .title {     color: rgb(0, 0, 139);     font-size: 48px;     line-height: 1.05;     border: none; }  .gradient {     height: 4px;     background: linear-gradient(to right, rgb(167, 54, 129), rgb(40, 71, 141));     width: 100%;     margin: 0 0 20px 0; }  h1, h2, h3, h4, h5, h6 {     color: rgb(0, 0, 139); }  .subtitle {     color: rgb(0, 0, 139);     font-size: 35px;     margin-top: 0; }  .author {     color: rgb(0, 0, 139);     font-size: 20px;     margin-top: 0; }  .version {     color: rgb(0, 0, 139);     font-size: 10px;     margin-top: 0; }  .footer {     z-index: 15;     opacity: 0.85;     max-width: 100%; }  .page-break {     page-break-after: always; }",
     "markdown-pdf-plus.usePageStyleFromCSS": true,
+    "markdown-pdf.displayHeaderFooter": false,
+    "markdown-pdf.executablePath": "/usr/bin/brave-browser",
     "protobuf.externalLinter.enabled": true,
     "protobuf.externalLinter.linter": "buf",
-    "protobuf.protoc.path": "C:\\Users\\C20734E\\scoop\\shims\\protoc.exe",
-    "protobuf.buf.path": "C:\\Users\\C20734E\\AppData\\Roaming\\Code\\User\\globalStorage\\drblury.protobuf-vsc\\bin\\buf.exe",
-    "chat.viewSessions.orientation": "stacked"
+    "chat.viewSessions.orientation": "stacked",
+    "atlascode.jira.enabled": true,
+    "atlascode.rovodev.showEntitlementNotifications": false,
+    "chat.tools.terminal.autoApprove": {
+        "docker compose": true,
+        "dotnet build": true,
+        "dotnet test": true
+    },
+    "ooxml.dotNetPath": "/usr/bin/dotnet"
 }

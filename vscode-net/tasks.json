@@ -2,12 +2,12 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build RestSpcService.Api Dev",
+      "label": "Build Main Project Dev",
       "command": "dotnet",
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "${workspaceFolder}/Capitole365.Operations.WebApi/Capitole365.Operations.WebApi.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary",
         "/p:Configuration=Debug",
@@ -17,15 +17,15 @@
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "Run RestSpcService [https]",
+      "label": "Run Main Project [Capitole365.Operations.WebApi]",
       "command": "dotnet",
       "type": "process",
       "args": [
         "run",
         "--project",
-        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "${workspaceFolder}/Capitole365.Operations.WebApi/Capitole365.Operations.WebApi.csproj",
         "--launch-profile",
-        "https"
+        "Capitole365.Operations.WebApi"
       ],
       "problemMatcher": "$msCompile",
       "group": {
@@ -34,16 +34,16 @@
       }
     },
     {
-      "label": "Watch RestSpcService [https]",
+      "label": "Watch Main Project [Capitole365.Operations.WebApi]",
       "command": "dotnet",
       "type": "process",
       "args": [
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "${workspaceFolder}/Capitole365.Operations.WebApi/Capitole365.Operations.WebApi.csproj",
         "--launch-profile",
-        "https"
+        "Capitole365.Operations.WebApi"
       ],
       "problemMatcher": "$msCompile",
       "group": {
@@ -52,12 +52,12 @@
       }
     },
     {
-      "label": "Publish RestSpcService.Api",
+      "label": "Publish Main Project",
       "type": "shell",
       "command": "dotnet",
       "args": [
         "publish",
-        "${workspaceFolder}/src/RestSpcService.Api/RestSpcService.Api.csproj",
+        "${workspaceFolder}/Capitole365.Operations.WebApi/Capitole365.Operations.WebApi.csproj",
         "-c",
         "Release",
         "/p:EnvironmentName=${input:env}",
@@ -72,10 +72,10 @@
         "isDefault": true
       },
       "problemMatcher": [],
-      "detail": "Publica el proyecto RestSpcService.Api en el entorno seleccionado."
+      "detail": "Publica el proyecto en el entorno seleccionado."
     },
     {
-      "label": "Publish and Zip RestSpcService.Api",
+      "label": "Publish and Zip Main Project",
       "type": "shell",
       "command": "cmd",
       "args": [
@@ -83,92 +83,41 @@
         "cd ${workspaceFolder}/publish/${input:env} && zip -r ${input:version}.${input:env}.zip * && move ${input:version}.${input:env}.zip ${workspaceFolder}/publish/${input:version}.${input:env}.zip"
       ],
       "dependsOn": [
-        "Publish RestSpcService.Api"
+        "Publish Main Project"
       ],
       "dependsOrder": "sequence",
       "problemMatcher": []
     },
     {
-      "label": "Veracode Clean",
-      "type": "shell",
-      "command": "C:/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/msbuild.exe",
-      "args": [
-        "Veracode.Package.build",
-        "/t:VeracodeClean",
-        "/p:VeracodeBuild=true"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [],
-      "group": "build"
-    },
-    {
-      "label": "Veracode Build",
-      "type": "shell",
-      "command": "C:/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/msbuild.exe",
-      "args": [
-        "RestSpcService.sln",
-        "/p:VeracodeBuild=true",
-        "/p:VeracodeSolutionName=RestSpcService",
-        "/p:VeracodeBuildOutputPath=.veracode",
-        "/p:VeracodeRemoveExecutables=false",
-        "/verbosity:m"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [],
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "Veracode Clean"
-      ],
-      "group": "build"
-    },
-    {
-      "label": "Veracode Package",
-      "type": "shell",
-      "command": "C:/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/msbuild.exe",
-      "args": [
-        "Veracode.Package.build",
-        "/p:VeracodeBuild=true",
-        "/p:VeracodeSolutionName=RestSpcService",
-        "/p:VeracodeBuildOutputPath=.veracode",
-        "/p:VeracodeZip=true",
-        "/verbosity:m"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [],
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "Veracode Build"
-      ],
-      "group": "build",
-      "detail": "Clean, build and package the solution for Veracode static scanning."
-    },
-    {
       "label": "Generate Test Coverage",
-      "dependsOn": [],
       "command": "DotNetCoverageTests",
       "type": "shell",
       "args": [
         "${workspaceFolder}",
-        "test/RestSpcService.Application.Tests",
-        "test/RestSpcService.Architecture.Tests"
-      ]
+        "UnitTestWebApi",
+      ],
+      "problemMatcher": []
     },
     {
-      "label": "Generate Coverage Report",
+      "label": "Generate Test Report",
       "command": "~/.dotnet/tools/reportgenerator",
       "type": "shell",
       "args": [
         "-reports:${workspaceFolder}/testresult/coverage.info",
         "-targetdir:${workspaceFolder}/testresult/covstats"
       ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate Test Coverage with Report",
       "dependsOn": [
         "Generate Test Coverage"
+      ],
+      "command": "~/.dotnet/tools/reportgenerator",
+      "type": "shell",
+      "args": [
+        "-reports:${workspaceFolder}/testresult/coverage.info",
+        "-targetdir:${workspaceFolder}/testresult/covstats"
       ],
       "problemMatcher": []
     }
@@ -177,7 +126,7 @@
     {
       "id": "env",
       "type": "pickString",
-      "description": "Selecciona el entorno",
+      "description": "Select the environment to publish to",
       "options": [
         "QA",
         "UAT",
@@ -188,7 +137,7 @@
     {
       "id": "version",
       "type": "promptString",
-      "description": "Introduce la versión a publicar (ej. 2.0.0.0)",
+      "description": "Enter the version to publish (e.g. 2.0.0.0)",
       "default": "2.0.0.0"
     }
   ]

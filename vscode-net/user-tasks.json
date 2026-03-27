@@ -1,8 +1,52 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
+    {
+      "label": "Clean Bin and Obj Folders (Linux)",
+      "type": "shell",
+      "command": "find \"${workspaceFolder}\" -type d \\( -name 'bin' -o -name 'obj' \\) -print -exec rm -rf {} +",
+      "options": {
+        "shell": {
+          "executable": "/bin/bash",
+          "args": ["-c"]
+        }
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "detail": "Remove all bin and obj folders from the workspace directory."
+    },
+    {
+      "label": "Print Bin and Obj Folders (Linux)",
+      "type": "shell",
+      "command": "find \"${workspaceFolder}\" -type d \\( -name 'bin' -o -name 'obj' \\)",
+      "options": {
+        "shell": {
+          "executable": "/bin/bash",
+          "args": ["-c"]
+        }
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "detail": "Print all bin and obj folders from the workspace directory."
+    },
     {
       "label": "Clean Bin and Obj Folders (Windows)",
       "type": "shell",
@@ -87,7 +131,7 @@
       "id": "logPath",
       "type": "promptString",
       "description": "Enter the log file path",
-      "default": "C:/Logs/AuthApi/splunk.log"
+      "default": "./splunk.log"
     }
   ]
 }

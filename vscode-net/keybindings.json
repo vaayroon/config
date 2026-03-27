@@ -59,5 +59,15 @@
     "key": "ctrl+k ctrl+k",
     "command": "-turboConsoleLog.insertCustomLog",
     "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+a",
+    "command": "editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+a",
+    "command": "-editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly"
   }
 ]
