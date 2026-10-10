@@ -67,10 +67,12 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 # Manual configuration
 
 #export DOTNET_ROOT=$HOME/.dotnet
-export PATH=/root/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.bin:/opt/mssql-tools18/bin:/usr/share/dotnet:$HOME/.dotnet/tools:$HOME/go/bin
+export PATH=/root/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.bin:/opt/mssql-tools18/bin:/usr/share/dotnet:$HOME/.dotnet/tools:$HOME/go/bin:/usr/local/go/bin
 
 USER_BIN_PATH="$HOME/.local/bin/"
 export PATH="$USER_BIN_PATH:$PATH"
+
+export SSL_CERT_DIR="$HOME/.aspnet/dev-certs/trust:/usr/lib/ssl/certs"
 
 # Start my alias
 
@@ -88,6 +90,7 @@ alias diff='diff --color=auto'
 alias sudo="sudo "
 alias catnormal='/usr/bin/cat'
 alias kittyprint='kitty +kitten icat'
+# alias npm=pnpm
 
 ## dotnet alias
 function DotNetCoverageTests() {
@@ -268,8 +271,8 @@ function decrypt_file() {
 
 ## copilot alias
 alias '?'='copilot'
-alias '??'='copilot -p'
-alias '???'='copilot -i'
+alias '??'='copilot -i'
+alias '???'='copilot -p'
 
 ### End my alias
 
@@ -358,8 +361,19 @@ function rmk(){
   done
 }
 
-# gpg agent for ssh
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+# GPG Agent
+if tty -s; then
+  export GPG_TTY="$(tty)"
+  gpg-connect-agent updatestartuptty /bye &>/dev/null
+fi
+
+# SSH via gpg-agent
+unset SSH_AGENT_PID
+
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne "$$" ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+
 gpgconf --launch gpg-agent
 
 #export CLR_OPENSSL_VERSION_OVERRIDE=1.1
@@ -375,15 +389,39 @@ if [ -d "$FNM_PATH" ]; then
 fi
 
 # pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
+export PNPM_HOME="/home/kevin/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+
+# Rustup
+if [ -f "$HOME/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
 
 # init zoxide
 eval "$(zoxide init zsh)"
 
+# bre setup
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+
+# opencode
+export PATH=/home/kevin/.opencode/bin:$PATH
+
+# engram
+# export ENGRAM_PROJECT=temporal
+
+# Java
+export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
+export PATH="$JAVA_HOME/bin:$PATH"
+
 # Finalize Powerlevel10k instant prompt. Should stay at the bottom of ~/.zshrc.
 (( ! ${+functions[p10k]} )) || p10k finalize
+
+
+# Added by Antigravity CLI installer
+# export PATH="/home/kevin/.local/bin:$PATH"
+export CHROME_DESKTOP=open-whispr.desktop
+export XDG_CURRENT_DESKTOP=qtile:X-Generic

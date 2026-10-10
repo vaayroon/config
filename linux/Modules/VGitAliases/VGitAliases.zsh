@@ -233,90 +233,116 @@ function gunwip() {
 }
 
 # Elimina ramas locales que ya no existen en remoto (gone)
-function gbclean() {
-  emulate -L zsh
-  local -A opthash
-  zparseopts -D -A opthash -- d=flag_soft D=flag_force n=flag_dry_run
-  
-  local delete_flag="-d"
-  local remote="origin"
-  local force=false
-  local dry_run=false
-  
-  # Procesar argumentos
-  if (( ${#flag_force} )); then
-    delete_flag="-D"
-  elif (( ${#flag_soft} )); then
-    delete_flag="-d"
-  fi
-  
-  if (( ${#flag_dry_run} )); then
-    dry_run=true
-  fi
-  
-  # Actualizar referencias remotas
-  echo "\033[0;36m🔄 Actualizando referencias remotas...\033[0m"
-  git remote prune $remote
-  
-  # Obtener ramas locales que ya no están en remoto
-  echo "\033[0;36m🔍 Buscando ramas locales sin equivalente remoto...\033[0m"
-  local current_branch=$(git_current_branch)
-  local -a gone_branches
-  gone_branches=($(git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads | 
-                  grep '\[gone\]$' | 
-                  awk '{print $1}' | 
-                  grep -v "^$current_branch\$"))
-  
-  # Si no hay ramas para eliminar
-  if (( ${#gone_branches} == 0 )); then
-    echo "\033[0;32m✅ No se encontraron ramas locales para eliminar.\033[0m"
-    return 0
-  fi
-  
-  # Mostrar ramas que serán eliminadas
-  echo "\033[0;33m🗑️ Ramas locales que serán eliminadas:\033[0m"
-  for branch in $gone_branches; do
-    echo "\033[0;33m   - $branch\033[0m"
-  done
-  
-  # Si es una ejecución de prueba, terminar aquí
-  if [[ "$dry_run" == true ]]; then
-    echo "\033[0;36mℹ️ Modo de prueba: No se ha eliminado ninguna rama.\033[0m"
-    return 0
-  fi
-  
-  # Solicitar confirmación si no está en modo forzado
-  if [[ "$force" == false ]]; then
-    echo -n "¿Eliminar estas ramas? (s/N) "
-    read confirmation
-    if [[ ! "$confirmation" =~ ^[sS]$ ]]; then
-      echo "\033[0;31m❌ Operación cancelada.\033[0m"
-      return 1
-    fi
-  fi
-  
-  # Eliminar las ramas
-  local deleted_count=0
-  local error_count=0
-  
-  for branch in $gone_branches; do
-    echo -n "\033[0;36m🗑️ Eliminando rama: $branch\033[0m"
-    if git branch $delete_flag $branch 2>/dev/null; then
-      echo " \033[0;32m✅\033[0m"
-      ((deleted_count++))
-    else
-      echo " \033[0;31m❌\033[0m"
-      echo "\033[0;31m   Error al eliminar la rama $branch\033[0m"
-      ((error_count++))
-    fi
-  done
-  
-  # Resumen final
-  echo "\n\033[0;36m🎉 Resumen:\033[0m"
-  echo "\033[0;32m   ✅ Ramas eliminadas: $deleted_count\033[0m"
-  if (( error_count > 0 )); then
-    echo "\033[0;31m   ❌ Errores: $error_count\033[0m"
-    echo "\033[0;33m      Para forzar eliminación, utiliza: gbclean -D\033[0m"
-  fi
-}
+function gbclean () {
+	emulate -L zsh
+	local -A opthash
+	zparseopts -D -A opthash -- d=flag_soft D=flag_force n=flag_dry_run i=flag_interactive
+	local delete_flag="-d"
+	local remote="origin"
+	local force=false
+	local dry_run=false
+	if (( ${#flag_force} ))
+	then
+		delete_flag="-D"
+	elif (( ${#flag_soft} ))
+	then
+		delete_flag="-d"
+	fi
+	if (( ${#flag_dry_run} ))
+	then
+		dry_run=true
+	fi
+	echo "\033[0;36m🔄 Actualizando referencias remotas...\033[0m"
+	git fetch "$remote" --prune > /dev/null 2>&1 || git remote prune "$remote"
+	echo "\033[0;36m🔍 Buscando ramas locales sin equivalente remoto...\033[0m"
+	local current_branch=$(git_current_branch)
+	local -a candidate_branches
+	local branch upstream
+	while read -r branch upstream
+	do
+		[[ -z "$branch" ]] && continue
+		[[ "$branch" == "$current_branch" ]] && continue
+		if [[ "$upstream" == "[gone]" ]]
+		then
+			candidate_branches+=("$branch")
+			continue
+		fi
+		if [[ -z "$upstream" ]]
+		then
+			if ! git show-ref --verify --quiet "refs/remotes/$remote/$branch"
+			then
+				candidate_branches+=("$branch")
+			fi
+		fi
+	done < <(git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads)
+	if (( ${#candidate_branches} == 0 ))
+	then
+		echo "\033[0;32m✅ No se encontraron ramas locales para eliminar.\033[0m"
+		return 0
+	fi
 
+	# --- NUEVO: selección interactiva opcional ---
+	if (( ${#flag_interactive} ))
+	then
+		if ! command -v fzf > /dev/null 2>&1
+		then
+			echo "\033[0;31m❌ La opción -i requiere tener 'fzf' instalado.\033[0m"
+			return 1
+		fi
+		echo "\033[0;33m🌿 Candidatas a eliminar (${#candidate_branches}):\033[0m"
+		local -a selected_branches
+		selected_branches=("${(@f)$(printf '%s\n' "${candidate_branches[@]}" | fzf --multi \
+			--height=~50% --border --prompt="Ramas> " \
+			--header='TAB: marcar/desmarcar · ENTER: confirmar selección (ninguna marcada por defecto)')}")
+		if (( ${#selected_branches} == 0 ))
+		then
+			echo "\033[0;31m❌ No se seleccionó ninguna rama. Operación cancelada.\033[0m"
+			return 1
+		fi
+		candidate_branches=("${selected_branches[@]}")
+	fi
+	# --- fin selección interactiva ---
+
+	echo "\033[0;33m🗑️ Ramas locales que serán eliminadas:\033[0m"
+	for branch in "${candidate_branches[@]}"
+	do
+		echo "\033[0;33m   - $branch\033[0m"
+	done
+	if [[ "$dry_run" == true ]]
+	then
+		echo "\033[0;36mℹ️ Modo de prueba: No se ha eliminado ninguna rama.\033[0m"
+		return 0
+	fi
+	if [[ "$force" == false ]]
+	then
+		echo -n "¿Eliminar estas ramas? (s/N) "
+		read confirmation
+		if [[ ! "$confirmation" =~ ^[sS]$ ]]
+		then
+			echo "\033[0;31m❌ Operación cancelada.\033[0m"
+			return 1
+		fi
+	fi
+	local deleted_count=0
+	local error_count=0
+	for branch in "${candidate_branches[@]}"
+	do
+		echo -n "\033[0;36m🗑️ Eliminando rama: $branch\033[0m"
+		if git branch $delete_flag -- "$branch" 2> /dev/null
+		then
+			echo " \033[0;32m✅\033[0m"
+			((deleted_count++))
+		else
+			echo " \033[0;31m❌\033[0m"
+			echo "\033[0;31m   Error al eliminar la rama $branch\033[0m"
+			((error_count++))
+		fi
+	done
+	echo "\n\033[0;36m🎉 Resumen:\033[0m"
+	echo "\033[0;32m   ✅ Ramas eliminadas: $deleted_count\033[0m"
+	if (( error_count > 0 ))
+	then
+		echo "\033[0;31m   ❌ Errores: $error_count\033[0m"
+		echo "\033[0;33m      Para forzar eliminación, utiliza: gbclean -D\033[0m"
+	fi
+}
