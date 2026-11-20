@@ -67,7 +67,7 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 # Manual configuration
 
 #export DOTNET_ROOT=$HOME/.dotnet
-export PATH=/root/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.bin:/opt/mssql-tools18/bin:/usr/share/dotnet:$HOME/.dotnet/tools:$HOME/go/bin:/usr/local/go/bin
+export PATH=/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.bin:/opt/mssql-tools18/bin:/usr/share/dotnet:$HOME/.dotnet/tools:$HOME/go/bin:/usr/local/go/bin
 
 USER_BIN_PATH="$HOME/.local/bin/"
 export PATH="$USER_BIN_PATH:$PATH"
@@ -417,11 +417,18 @@ export PATH=/home/kevin/.opencode/bin:$PATH
 export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
 export PATH="$JAVA_HOME/bin:$PATH"
 
-# Finalize Powerlevel10k instant prompt. Should stay at the bottom of ~/.zshrc.
-(( ! ${+functions[p10k]} )) || p10k finalize
+# Android
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$PATH"
 
 
 # Added by Antigravity CLI installer
 # export PATH="/home/kevin/.local/bin:$PATH"
 export CHROME_DESKTOP=open-whispr.desktop
 export XDG_CURRENT_DESKTOP=qtile:X-Generic
+
+. "$HOME/.local/bin/env"
+
+# Finalize Powerlevel10k instant prompt. Should stay at the bottom of ~/.zshrc.
+(( ! ${+functions[p10k]} )) || p10k finalize
+
