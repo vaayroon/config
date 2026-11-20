@@ -389,7 +389,7 @@ if [ -d "$FNM_PATH" ]; then
 fi
 
 # pnpm
-export PNPM_HOME="/home/kevin/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
@@ -408,7 +408,7 @@ eval "$(zoxide init zsh)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 
 # opencode
-export PATH=/home/kevin/.opencode/bin:$PATH
+export PATH=$HOME/.opencode/bin:$PATH
 
 # engram
 # export ENGRAM_PROJECT=temporal
@@ -423,7 +423,7 @@ export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$PATH
 
 
 # Added by Antigravity CLI installer
-# export PATH="/home/kevin/.local/bin:$PATH"
+# export PATH="$HOME/.local/bin:$PATH"
 export CHROME_DESKTOP=open-whispr.desktop
 export XDG_CURRENT_DESKTOP=qtile:X-Generic
 
